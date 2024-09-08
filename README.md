@@ -28,7 +28,7 @@ The BGU Complaint Generator is a project designed to test and integrate various 
 1. Clone the repository.
 2. Create `.env` file for the GROQ_API_KEY token and get your own groq api key.
 3. Create a `firebase_auth.json` file for the firebase authantication.
-4. Use `docker-compose.yml` and `Dockerfile` to create your own runing container.
+4. Use `docker-compose.yml` and `Dockerfile` to create an image and run it using docker.
 
  
 ## Usage
