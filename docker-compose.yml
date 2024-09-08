@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=main.py
+      - FLASK_ENV=development
+      - FIREBASE_AUTH_PATH=/secrets/firebase_auth.json
+    volumes:
+      - .:/ComplaintGenerator
+      - ./firebase_auth.json:/secrets/firebase_auth.json:ro
+      - ./static:/ComplaintGenerator/static
+      - ./templates:/ComplaintGenerator/templates
+    env_file:
+      - .env
