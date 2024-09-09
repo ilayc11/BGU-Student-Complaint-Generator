@@ -7,31 +7,30 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Docker
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker.io
-    - name: Install Docker Compose
-      run: |
-        DOCKER_COMPOSE_VERSION="1.29.2"  # You can set the version you need
-        sudo curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
-    - name: Verify Docker Compose
-      run: docker-compose --version
+
+    # Set up Docker Buildx (includes Docker and Docker Compose)
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    # Build and run the Docker Compose services
     - name: Build and run Docker Compose
       run: |
         docker-compose build
         docker-compose up -d
+
+    # Check running containers
     - name: Check running containers
       run: docker-compose ps
+
+    # View container logs
     - name: View container logs
       run: docker-compose logs
+
+    # Stop and remove containers
     - name: Stop and remove containers
       run: docker-compose down
