@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Docker Compose CI
 
 on:
   push:
@@ -14,8 +14,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name
-    - name: Run the Docker container with port mapping
-      run: docker run -d -p 5000:5000 --name my-running-container my-image-name:latest
-           docker ps  # Optional: To verify the container is running
+    - name: Set up Docker Compose
+      run: docker-compose --version
+    - name: Build and run Docker Compose
+      run: |
+        docker-compose build
+        docker-compose up -d
+    - name: Check running containers
+      run: docker-compose ps
+    - name: View container logs
+      run: docker-compose logs
