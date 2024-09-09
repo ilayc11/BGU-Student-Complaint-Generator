@@ -13,15 +13,26 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    # Set up Docker Buildx (includes Docker and Docker Compose)
+    # Set up Docker Buildx (includes Docker)
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    # Build and run the Docker Compose services
+    # Install Docker Compose
+    - name: Install Docker Compose
+      run: |
+        DOCKER_COMPOSE_VERSION="1.29.2"  # You can set the version you need
+        sudo curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+
+    # Verify Docker Compose installation
+    - name: Verify Docker Compose
+      run: docker-compose --version
+
+    # Build and run the Docker Compose services using the docker-compose.yml from your repo
     - name: Build and run Docker Compose
       run: |
-        docker-compose build
-        docker-compose up -d
+        docker-compose -f docker-compose.yml build
+        docker-compose -f docker-compose.yml up -d
 
     # Check running containers
     - name: Check running containers
