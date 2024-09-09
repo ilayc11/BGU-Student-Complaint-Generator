@@ -16,7 +16,6 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name
-    - name: Run the Docker container
-      run: |
-        docker run -d --name my-running-container my-image-name
-        docker ps  # Optional: To verify the container is running
+    - name: Run the Docker container with port mapping
+      run: docker run -d -p 5000:5000 --name my-running-container my-image-name:latest
+           docker ps  # Optional: To verify the container is running
