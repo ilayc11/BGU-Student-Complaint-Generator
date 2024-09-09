@@ -50,11 +50,63 @@
             font-size: 18px;
             border-radius: 6px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.3s ease-in-out;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            margin-bottom: 10px;
         }
 
         button:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        button:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%) rotate(45deg);
+            transition: width 0.5s ease, height 0.5s ease;
+            z-index: -1;
+            border-radius: 50%;
+        }
+
+        button:hover:before {
+            width: 0;
+            height: 0;
+        }
+
+        button:focus {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        #toggleRecording, #readBack, #readGeneratedComplaint {
+            margin-bottom: 10px;
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 10px auto;
         }
 
         .result {
@@ -66,7 +118,8 @@
             text-align: left;
             word-wrap: break-word;
         }
-footer {
+
+        footer {
             margin-top: 40px;
             padding: 20px;
             background-color: #f8f9fa;
@@ -109,16 +162,102 @@ footer {
 <div class="container">
     <h1>BGU Student Complaint Generator</h1>
     <form action="/get_complaint" method="post">
-        <textarea name="complaint" placeholder="Enter new bad thing..."></textarea><br>
+        <textarea id="voiceInput" name="complaint" placeholder="Speak or type your complaint here..."></textarea><br>
+        <button id="toggleRecording" type="button">🎤 Start Recording</button>
+        <button id="readBack" type="button">🔊 Read Back</button>
+        <button id="readGeneratedComplaint" type="button">📣 Read Complaint</button><br><br>
         <button type="submit">Submit</button>
     </form>
     {% if complaint %}
     <div class="result">
         <h2>Generated Complaint:</h2>
-        <p>{{complaint}}</p>
+        <p id="generatedComplaint">{{complaint}}</p>
     </div>
     {% endif %}
     <footer>Created by a bored BGU student during summer vacation.</footer>
 </div>
+
+<script>
+    const voiceInput = document.getElementById('voiceInput');
+    const toggleRecording = document.getElementById('toggleRecording');
+    const readBackButton = document.getElementById('readBack');
+    const readGeneratedComplaintButton = document.getElementById('readGeneratedComplaint');
+    const generatedComplaint = document.getElementById('generatedComplaint');
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US'; // Set language for speech recognition
+
+    let isRecording = false;
+
+    // Toggle voice recognition
+    toggleRecording.onclick = () => {
+        if (!isRecording) {
+            recognition.start();
+            toggleRecording.innerText = "🛑 Stop Recording";
+            isRecording = true;
+        } else {
+            recognition.stop();
+            toggleRecording.innerText = "🎤 Start Recording";
+            isRecording = false;
+        }
+    };
+
+    // Update textarea with speech input
+    recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            transcript += event.results[i][0].transcript;
+        }
+        voiceInput.value = transcript;
+    };
+
+    recognition.onerror = (event) => {
+        console.error("Speech recognition error: ", event.error);
+    };
+
+    // Function to read the text input back to the user
+    const readBackText = () => {
+        const complaintText = voiceInput.value;
+        if (!complaintText) {
+            alert("Please enter or dictate a complaint first.");
+            return;
+        }
+        const speechSynthesis = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance(complaintText);
+
+        // Set options like voice, rate, pitch
+        utterance.rate = 1; // Speed of reading
+        utterance.pitch = 1; // Pitch of the voice
+        utterance.lang = 'en-US'; // Language for reading
+
+        speechSynthesis.speak(utterance);
+    };
+
+    // Function to read the generated complaint back to the user
+    const readGeneratedComplaint = () => {
+        const complaintText = generatedComplaint ? generatedComplaint.innerText : '';
+        if (!complaintText) {
+            alert("There is no generated complaint to read back.");
+            return;
+        }
+        const speechSynthesis = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance(complaintText);
+
+        // Set options like voice, rate, pitch
+        utterance.rate = 1; // Speed of reading
+        utterance.pitch = 1; // Pitch of the voice
+        utterance.lang = 'en-US'; // Language for reading
+
+        speechSynthesis.speak(utterance);
+    };
+
+    // Bind the button to read the complaint back
+    readBackButton.onclick = readBackText;
+    readGeneratedComplaintButton.onclick = readGeneratedComplaint;
+</script>
 </body>
 </html>
