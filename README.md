@@ -1,5 +1,6 @@
 # BGU-Student-Complaint-Generator
-## Service Deployed Link
+## Service Link
+🟢 Currently Deployed
 [https://bgu-complaint-generator-1.onrender.com](https://bgu-complaint-generator-1.onrender.com)
 
 ## Overview 
