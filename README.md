@@ -1,7 +1,7 @@
 # BGU-Student-Complaint-Generator
 ## Overview 
 
-The BGU Complaint Generator is a project designed to test and integrate various technological tools. The application uses a combination of Google’s LLM, Gemma2, Flask, HTML, CSS, and Firebase to create a functional and interactive web-based complaint generator. Docker is used to containerize the application for consistent development and deployment.
+The BGU Student Complaint Generator is a project designed to test and integrate various technological tools. The application uses a combination of Google’s LLM, Gemma2, Flask, HTML, CSS, and Firebase to create a functional and interactive web-based complaint generator. Docker is used to containerize the application for consistent development and deployment.
 
 
 ## Technologies Used
