@@ -48,8 +48,10 @@ The BGU Student Complaint Generator is a project designed to test and integrate 
 
 2. **Submitting a Complaint**:
    - The user can enter and submit a new complaint through the web interface.
+   - The system can record a voice complaint and convert it to text.
    - Upon submission, the complaint is sent to Google’s LLM (Gemma2) via the Groq module.
    - The LLM generates a new, made-up complaint in response, which is then saved back to the Firebase database along with all previous messages exchanged between the user and the model.
+   - The generated complaint can be voiced back to the user.
 ![image](https://github.com/user-attachments/assets/b16704f7-f513-4391-9fab-0440820d6edc)
 ![image](https://github.com/user-attachments/assets/425fa103-66e6-459e-9215-3badfc4bc6ab)
 
