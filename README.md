@@ -1,6 +1,6 @@
 # BGU-Student-Complaint-Generator
 ## Service Link
-🟢 Currently Deployed
+🟡 Currently deployed, but accessing the site might take a while if no recent attempt to access it has been made(due to Onrender system).
 [https://bgu-complaint-generator-1.onrender.com](https://bgu-complaint-generator-1.onrender.com)
 
 ## Overview 
